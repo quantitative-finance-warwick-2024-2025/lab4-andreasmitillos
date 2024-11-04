@@ -22,7 +22,13 @@ std::string day_to_name(int day_number)
             "Saturday",
             "Sunday"};
 
-    return invalid;
+    // Check for valid day number
+    if (day_number < 1 || day_number > 7)
+    {
+        return invalid;
+    }
+
+    return days[day_number - 1];
 }
 
 /*
@@ -33,6 +39,9 @@ Use print_swap to check your implementation.
 */
 void swap(int *x, int *y)
 {
+    int temp = *y;
+    *y = *x;
+    *x = temp;
 }
 
 void print_swap()
@@ -51,6 +60,9 @@ Use print_swap_in_place to check your implementation.
 */
 void swap_in_place(int *x, int *y)
 {
+    *x += *y;
+    *y = *x - *y;
+    *x = *x - *y;
 }
 
 void print_swap_in_place()
@@ -70,19 +82,28 @@ Use print_add_vector to check your implementation.
 */
 void add_vector(int *a, int *b, int *result, int size)
 {
+    for (int i = 0; i < size; i++)
+    {
+        result[i] = a[i] + b[i];
+    }
+    
 }
 
 void print_add_vector()
 {
     std::array<int, 4> a = {1, 2, 3, 4};
     std::array<int, 4> b = {5, 6, 7, 8};
+
     int result[4];
     int size = 4;
+
     add_vector(a.data(), b.data(), result, size);
+
     for (int i = 0; i < size; ++i)
     {
         std::cout << result[i] << ' '; // should print 6, 8, 10, 12
     }
+
     std::cout << '\n';
 }
 
@@ -96,6 +117,10 @@ Use print_swap_vector to check your implementation.
 */
 void swap_vector(int **a, int **b)
 {
+    int* temp = *a;
+
+    *a = *b;
+    *b = temp;
 }
 
 void print_swap_vector()
@@ -106,6 +131,7 @@ void print_swap_vector()
     // obtain pointers to the start of each array
     int *pa = a.data();
     int *pb = b.data();
+    
     swap_vector(&pa, &pb);
     for (int i = 0; i < 4; ++i)
     {
@@ -131,13 +157,24 @@ result_i_j = sum(a_i_k * b_k_j) for k = 0 to k = b_rows - 1
 */
 void matrix_multiplication(int *a, int *b, size_t a_rows, size_t a_cols, size_t b_cols, int *result)
 {
+    for (size_t i = 0; i < a_rows; i++)
+    {
+        for (size_t j = 0; j < b_cols; j++)
+        {
+            for (size_t k = 0; k < a_cols; k++)
+            {
+                // std::cout << i * a_cols + j << " " << a[i * a_cols + k] << " " << b[k * a_cols + j] << std::endl;
+                result[i * a_rows + j] += a[i * a_cols + k] * b[k * b_cols + j];
+            }
+        }
+    }
 }
 
 void print_matrix_multiplication()
 {
-    size_t a_cols = 2, b_cols = 2;
-    std::vector<int> a = {1, 2, 3, 4};
-    std::vector<int> b = {5, 6, 7, 8};
+    size_t a_cols = 2, b_cols = 3;
+    std::vector<int> a = {1, 2, 3, 4, 5, 6};
+    std::vector<int> b = {5, 6, 7, 8, 9, 10};
     size_t a_rows = a.size() / a_cols;
     std::vector<int> result(a_rows * b_cols);
 
@@ -151,4 +188,6 @@ void print_matrix_multiplication()
         }
         std::cout << '\n';
     }
+
+
 }
